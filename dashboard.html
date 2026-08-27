@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Удержание клиентов — сверка отчёта</title>
+  <style>
+    :root {
+      --bg: #f4f2ee;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #d6d3d1;
+      --paper: #fffcf8;
+      --ok: #166534;
+      --warn: #92400e;
+      --bad: #9f1239;
+      --info: #1e3a5f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 15px/1.45 "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
+    h1 { font-size: 28px; font-weight: 650; margin: 0 0 8px; letter-spacing: -0.02em; }
+    h2 { font-size: 18px; font-weight: 650; margin: 36px 0 12px; }
+    .lede { color: var(--muted); margin: 0 0 24px; max-width: 720px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0 8px; }
+    .stat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 16px 18px;
+    }
+    .stat b { display: block; font-size: 28px; font-weight: 650; letter-spacing: -0.03em; }
+    .stat span { color: var(--muted); font-size: 12px; }
+    .stat.bad b { color: var(--bad); }
+    .stat.ok b { color: var(--ok); }
+    .stat.warn b { color: var(--warn); }
+    .banner {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      padding: 14px 16px;
+      margin: 16px 0 8px;
+    }
+    .banner strong { color: var(--bad); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--paper); }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 650; }
+    tr.bad td { background: #fff1f2; }
+    tr.warn td { background: #fff7ed; }
+    tr.ok td { background: #f0fdf4; }
+    .bars { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
+    .bar-row { display: grid; grid-template-columns: 140px 1fr 28px; gap: 8px; align-items: center; margin: 6px 0; font-size: 13px; }
+    .track { height: 10px; background: #e7e5e4; }
+    .fill { height: 10px; background: #1c1917; }
+    .fill.alt { background: #9f1239; }
+    .caption { font-size: 12px; color: var(--muted); margin-top: 8px; }
+    @media (max-width: 800px) {
+      .stats, .bars { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Удержание клиентов</h1>
+  <p class="lede">
+    Сверка report.csv с сырыми отгрузками works.csv.
+    Отчёт собран 2025-09-01, биллинг актуален до 2026-01.
+    Ниже — исправленная картина, не исходный отчёт.
+  </p>
+
+  <div class="banner">
+    Отток в отчёте <strong>занижен</strong>, но не целиком:
+    ложные продления Дельты и Кварца прячут уходы, ложный отвал Сигмы и два «неизвестно» ломают состав.
+    Уникальных клиентов <strong>12, не 11</strong>.
+  </div>
+
+  <div class="stats">
+    <div class="stat bad">
+      <b>33%</b>
+      <span>Доля пролонгации (в отчёте 42%)</span>
+    </div>
+    <div class="stat">
+      <b>12</b>
+      <span>Уникальных клиентов (в отчёте 11)</span>
+    </div>
+    <div class="stat warn">
+      <b>11</b>
+      <span>Событий оттока (в отчёте 9)</span>
+    </div>
+    <div class="stat ok">
+      <b>1</b>
+      <span>Сейчас активен: Орион Диджитал</span>
+    </div>
+  </div>
+
+  <h2>Статусы флайтов</h2>
+  <div class="bars">
+    <div>
+      <div class="caption">Исходный отчёт · 17 флайтов</div>
+      <div class="bar-row"><span>пролонгировано</span><div class="track"><div class="fill" style="width:29%"></div></div><span>5</span></div>
+      <div class="bar-row"><span>непролонгировано</span><div class="track"><div class="fill alt" style="width:41%"></div></div><span>7</span></div>
+      <div class="bar-row"><span>отвал</span><div class="track"><div class="fill alt" style="width:12%"></div></div><span>2</span></div>
+      <div class="bar-row"><span>неизвестно</span><div class="track"><div class="fill" style="width:12%"></div></div><span>2</span></div>
+      <div class="bar-row"><span>разовые</span><div class="track"><div class="fill" style="width:6%"></div></div><span>1</span></div>
+    </div>
+    <div>
+      <div class="caption">После правки · 18 флайтов · as of 2026-01</div>
+      <div class="bar-row"><span>пролонгировано</span><div class="track"><div class="fill" style="width:22%"></div></div><span>4</span></div>
+      <div class="bar-row"><span>непролонгировано</span><div class="track"><div class="fill alt" style="width:44%"></div></div><span>8</span></div>
+      <div class="bar-row"><span>прерван</span><div class="track"><div class="fill alt" style="width:11%"></div></div><span>2</span></div>
+      <div class="bar-row"><span>отвал</span><div class="track"><div class="fill alt" style="width:6%"></div></div><span>1</span></div>
+      <div class="bar-row"><span>смена услуги</span><div class="track"><div class="fill" style="width:6%"></div></div><span>1</span></div>
+      <div class="bar-row"><span>активен</span><div class="track"><div class="fill" style="width:6%"></div></div><span>1</span></div>
+      <div class="bar-row"><span>разовые</span><div class="track"><div class="fill" style="width:6%"></div></div><span>1</span></div>
+    </div>
+  </div>
+  <p class="caption">Доля пролонгации = пролонгировано / (пролонгировано + непролонгировано). Прерван и отвал — уход внутри договора, не «не продлили».</p>
+
+  <h2>Где отчёт врёт</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Клиент</th>
+        <th>В отчёте</th>
+        <th>По биллингу</th>
+        <th>Эффект на отток</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="bad">
+        <td>Дельта 320 / 321</td>
+        <td>Один клиент, ф1 пролонгировано</td>
+        <td>Два договора, оба непролонгировано. Параллельные отгрузки апр–июн</td>
+        <td>Ложное продление, −1 клиент</td>
+      </tr>
+      <tr class="bad">
+        <td>Кварц Медиа 330</td>
+        <td>Мониторинг 12 мес, продлён сквозь 2024</td>
+        <td>Крауд 6 мес не продлён; новый мониторинг с ноября прерван на 4/12</td>
+        <td>Главное завышение удержания</td>
+      </tr>
+      <tr class="warn">
+        <td>Титан Строй 331</td>
+        <td>Репутация 6+6, ф1 пролонгировано</td>
+        <td>Мониторинг 12 → смена на репутацию в июле. Клиент остался, это не like-for-like</td>
+        <td>Завышение продления той же услуги</td>
+      </tr>
+      <tr class="warn">
+        <td>Сигма Групп 340</td>
+        <td>Отвал в мае, потом непролонгировано, два flight_no=1</td>
+        <td>В июне снова платил — стоп не отвал. Второй флайт прерван на 3/6</td>
+        <td>Отвал завышен, тип ухода неверный</td>
+      </tr>
+      <tr class="warn">
+        <td>Орион 350</td>
+        <td>неизвестно</td>
+        <td>Продлился, сейчас активен (выгрузка до 2026-01)</td>
+        <td>Пропущенное продление</td>
+      </tr>
+      <tr class="bad">
+        <td>Пульс 351</td>
+        <td>неизвестно</td>
+        <td>После августа 2025 тишина — непролонгировано</td>
+        <td>Пропущенный уход</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Исправленные флаиты</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Клиент</th>
+        <th>Услуга</th>
+        <th>Флайт</th>
+        <th>Статус</th>
+        <th>Флаг</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="ok"><td>Аврора Клиник</td><td>Репутация 6</td><td>2024-01…06</td><td>пролонгировано</td><td>ok</td></tr>
+      <tr class="ok"><td>Аврора Клиник</td><td>Репутация 6</td><td>2024-07…12</td><td>непролонгировано</td><td>ok</td></tr>
+      <tr class="ok"><td>БетаСтрой</td><td>Крауд 6</td><td>2024-02…07</td><td>непролонгировано</td><td>ok</td></tr>
+      <tr class="ok"><td>Эверест Тур</td><td>Репутация 6</td><td>2024-03…08 last 06</td><td>отвал</td><td>ok</td></tr>
+      <tr class="ok"><td>Нова Медиа</td><td>Разовый</td><td>2024-05</td><td>завершился</td><td>ok</td></tr>
+      <tr class="ok"><td>Гамма Ритейл (310→311)</td><td>Репутация 6</td><td>2024-01…06 / 07…12</td><td>прол. / непрол.</td><td>ok</td></tr>
+      <tr class="warn"><td>Дельта Пиар 320</td><td>Репутация 6</td><td>2024-01…06</td><td>непролонгировано</td><td>спорно</td></tr>
+      <tr class="warn"><td>Дельта Реклама 321</td><td>Репутация 6</td><td>2024-04…09</td><td>непролонгировано</td><td>спорно</td></tr>
+      <tr class="bad"><td>Кварц Медиа</td><td>Крауд 6</td><td>2024-01…06</td><td>непролонгировано</td><td>fixed</td></tr>
+      <tr class="bad"><td>Кварц Медиа</td><td>Мониторинг 12</td><td>2024-11…2025-10 last 02</td><td>прерван</td><td>fixed</td></tr>
+      <tr class="warn"><td>Титан Строй</td><td>Мониторинг 12</td><td>2024-01…06</td><td>смена услуги</td><td>fixed</td></tr>
+      <tr class="ok"><td>Титан Строй</td><td>Репутация 6</td><td>2024-07…12</td><td>непролонгировано</td><td>ok</td></tr>
+      <tr class="warn"><td>Сигма Групп</td><td>Репутация 6</td><td>2024-01…06</td><td>пролонгировано</td><td>спорно</td></tr>
+      <tr class="bad"><td>Сигма Групп</td><td>Репутация 6</td><td>2024-07…12 last 09</td><td>прерван</td><td>fixed</td></tr>
+      <tr class="ok"><td>Орион Диджитал</td><td>Репутация 6</td><td>2025-03…08 / 09…2026-02</td><td>прол. / активен</td><td>fixed</td></tr>
+      <tr class="bad"><td>Пульс Медиа</td><td>Репутация 6</td><td>2025-03…08</td><td>непролонгировано</td><td>fixed</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">Источник: works.csv, projects_history.csv, service_changes.csv. Подробности в AUDIT.md.</p>
+</main>
+</body>
+</html>
